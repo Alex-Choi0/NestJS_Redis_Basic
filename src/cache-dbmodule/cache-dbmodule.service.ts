@@ -1,41 +1,23 @@
+// src/cache-dbmodule/cache-dbmodule.service.ts
 import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
-import { CreateCacheDbmoduleDto } from './dto/create-cache-dbmodule.dto';
-import { UpdateCacheDbmoduleDto } from './dto/update-cache-dbmodule.dto';
 
 @Injectable()
 export class CacheDbmoduleService {
   constructor(@Inject(CACHE_MANAGER) private readonly cacheManager: Cache) {}
 
-  create(createCacheDbmoduleDto: CreateCacheDbmoduleDto) {
-    return 'This action adds a new cacheDbmodule';
+  // DB에 키와 데이터를 생성한다.
+  async create(key: string, data: any) {
+    return await this.cacheManager.set(key, data);
   }
 
-  async findAll() {
-    console.log('save test as helloworld');
-    await this.cacheManager.set(
-      'test',
-      JSON.stringify({
-        user: 'alex',
-        age: 30,
-        email: 'alex@gmail.com',
-        info: {
-          hobby: ['bick'],
-        },
-      }),
-    );
-    return await this.cacheManager.get('test');
+  // 키값을 이용하여 DB를 조회한다.
+  async get(key: string) {
+    return await this.cacheManager.get(key);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} cacheDbmodule`;
-  }
-
-  update(id: number, updateCacheDbmoduleDto: UpdateCacheDbmoduleDto) {
-    return `This action updates a #${id} cacheDbmodule`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} cacheDbmodule`;
+  // 키값을 이용하여 DB의 데이터를 삭제한다.
+  async delete(key: string) {
+    return await this.cacheManager.del(key);
   }
 }
